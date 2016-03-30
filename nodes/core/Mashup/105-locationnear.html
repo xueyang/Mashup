@@ -1,0 +1,87 @@
+<!--
+  Copyright 2013 IBM Corp.
+
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+
+  http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+-->
+
+
+<script type="text/x-red" data-template-name="locationnear">
+    <div class="form-row">
+        <label for="node-input-keyword"><i class="fa fa-globe"></i> KeyWord</span></label>
+        <input type="text" id="node-input-keyword">
+    </div>
+    <div class="form-row">
+        <label for="node-input-latitude"><i class="fa fa-globe"></i> latitude</span></label>
+        <input type="text" id="node-input-latitude">
+    </div>
+    <div class="form-row">
+        <label for="node-input-longitude"><i class="fa fa-globe"></i> longitude</span></label>
+        <input type="text" id="node-input-longitude">
+    </div>
+    <div class="form-row">
+        <label for="node-input-radius"><i class="fa fa-globe"></i> radius</span></label>
+        <input type="text" id="node-input-radius">
+    </div>
+</script>
+
+<script type="text/x-red" data-help-name="translate">
+    <p>Provides a node for making http requests.</p>
+    <p>The URL and HTTP method can be configured in the node, if they are left blank they should be set in an incoming message on <code>msg.url</code> and <code>msg.method</code>:</p>
+    <ul>
+        <li><code>url</code>, if set, is used as the url of the request. Must start with http: or https:</li>
+        <li><code>method</code>, if set, is used as the HTTP method of the request.
+        Must be one of <code>GET</code>, <code>PUT</code>, <code>POST</code>, <code>PATCH</code> or <code>DELETE</code> (default: GET)</li>
+        <li><code>headers</code>, if set, should be an object containing field/value
+        pairs to be added as request headers</li>
+        <li><code>payload</code> is sent as the body of the request</li>
+    </ul>
+    <p>When configured within the node, the URL property can contain <a href="http://mustache.github.io/mustache.5.html" target="_new">mustache-style</a> tags. These allow the
+    url to be constructed using values of the incoming message. For example, if the url is set to
+    <code>example.com/{{{topic}}}</code>, it will have the value of <code>msg.topic</code> automatically inserted.
+    Using {{{...}}} prevents mustache from escaping characters like / & etc.</p>
+    <p>
+    The output message contains the following properties:
+    <ul>
+        <li><code>payload</code> is the body of the response</li>
+        <li><code>statusCode</code> is the status code of the response, or the error code if the request could not be completed</li>
+        <li><code>headers</code> is an object containing the response headers</li>
+    </ul>
+    <p><b>Note</b>: If you need to configure a proxy please add <b>http_proxy=...</b> to your environment variables and restart Node-RED.</p>
+</script>
+
+<script type="text/javascript">
+
+    RED.nodes.registerType('locationnear',{
+        category: 'REST',
+        color:"rgb(231, 231, 174)",
+        defaults: {
+            keyword: {value:""},
+            latitude: {value:""},
+            longitude: {value:""},
+            radius: {value:"1000"}
+            //user -> credentials
+            //pass -> credentials
+        },
+        inputs:1,
+        outputs:1,
+        icon: "white-globe.png",
+        label: function() {
+            return this.name||this._("httpin.httpreq");
+        },
+        labelStyle: function() {
+            return this.name?"node_label_italic":"";
+        },
+        oneditprepare: function() {
+        }
+    });
+</script>
